@@ -1,0 +1,41 @@
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace WebApi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthorsController(IAuthorService authorService) : ControllerBase
+    {
+        [HttpPost]
+        public async Task<Response<string>> Add(Author author)
+        {
+            return await authorService.Add(author);
+        }
+
+        [HttpPut]
+        public async Task<Response<string>> Update(Author author)
+        {
+            return await authorService.Update(author);
+        }
+
+        [HttpDelete("{authorId}")]
+        public async Task<Response<string>> Delete(int authorId)
+        {
+            return await authorService.Delete(authorId);
+        }
+
+        [HttpGet]
+        public async Task<Response<List<Author>>> GetAuthors()
+        {
+            return await authorService.GetAuthors();   
+        }
+
+        [HttpGet("{authorId}")]
+        public async Task<Response<Author>> GetAuthorById(int authorId)
+        {
+            return await authorService.GetAuthorById(authorId);
+        }
+    }
+}
