@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.DTOs;
 using WebApi.Interfaces;
 
 namespace WebApi.Controllers
@@ -36,6 +37,12 @@ namespace WebApi.Controllers
         public async Task<Response<User>> GetUserById(int UserId)
         {
             return await userService.GetUserById(UserId);
+        }
+
+        [HttpGet("{userid}/loans")]
+        public async Task<Response<UserWithLoans>> GetUserWithLoans(int userid)
+        {
+            return await userService.GetUserWithLoans(userid);
         }
     }
 }

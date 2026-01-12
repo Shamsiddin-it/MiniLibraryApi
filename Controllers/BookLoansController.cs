@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.DTOs;
 using WebApi.Interfaces;
 
 namespace WebApi.Controllers
@@ -9,7 +10,7 @@ namespace WebApi.Controllers
     public class BookLoansController(IBookLoanService bookLoanService) : ControllerBase
     {
         [HttpPost]
-        public async Task<Response<string>> Add(BookLoan bookLoan)
+        public async Task<Response<string>> Add(AddBookLoanDto bookLoan)
         {
             return await bookLoanService.Add(bookLoan);
         }

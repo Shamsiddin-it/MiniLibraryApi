@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using Dapper;
+using WebApi.DTOs;
 using WebApi.Interfaces;
 
 namespace WebApi.Services;
@@ -97,4 +98,33 @@ public class UserService(ApplicationDbContext applicationDbContext): IUserServic
             return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
+
+    public async Task<Response<UserWithLoans>> GetUserWithLoans(int userId)
+    {
+        using var conn = dbContext.Connection();
+        var query = "select u.fullname, u.email from users u where u.id=@id";
+        var query2 = "select * from bookloans where userid=@id";
+        var res = await conn.QueryFirstOrDefaultAsync<UserWithLoans>(query, new {id=userId});
+        var res2 = await conn.QueryAsync<BookLoan>(query2, new {id=userId});
+        
+        if (res != null)
+        {
+            foreach(var item in res2)
+            {
+                res.BookLoans.Add(item);
+            }
+            UserWithLoans userWithLoans = new UserWithLoans
+            {
+                FullName = res.FullName,
+                Email = res.Email,
+                BookLoans = res.BookLoans
+            };
+            return new Response<UserWithLoans>(HttpStatusCode.OK, "found", userWithLoans);
+        }
+        else
+        {
+            return new Response<UserWithLoans>(HttpStatusCode.InternalServerError, "could not find anything");
+        }
+    }
+
 }

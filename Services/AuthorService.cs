@@ -1,14 +1,21 @@
 using System.Net;
 using Dapper;
 using Microsoft.AspNetCore.Components.Authorization;
+using WebApi.DTOs;
 
 public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorService
 {
     private readonly ApplicationDbContext dbContext = applicationDbContext;
-    public async Task<Response<string>> Add(Author author)
+    public async Task<Response<string>> Add(AuthorDto author1)
     {
         try
         {
+            Author author = new Author
+            {
+                FullName = author1.FullName,
+                BirthDate = author1.BirthDate,
+                Country = author1.Country
+            };
             using var conn = dbContext.Connection();
             var query = "insert into authors(fullname, birthdate, country) values(@fullname, @birthdate, @country)";
             var res = await conn.ExecuteAsync(query, new {fullname = author.FullName, birthdate = author.BirthDate, country = author.Country});

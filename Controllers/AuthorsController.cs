@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.DTOs;
 
 namespace WebApi.Controllers
 {
@@ -9,7 +10,7 @@ namespace WebApi.Controllers
     public class AuthorsController(IAuthorService authorService) : ControllerBase
     {
         [HttpPost]
-        public async Task<Response<string>> Add(Author author)
+        public async Task<Response<string>> Add(AuthorDto author)
         {
             return await authorService.Add(author);
         }

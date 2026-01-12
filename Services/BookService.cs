@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using Dapper;
+using WebApi.DTOs;
 using WebApi.Interfaces;
 
 namespace WebApi.Services;
@@ -8,10 +9,17 @@ namespace WebApi.Services;
 public class BookService(ApplicationDbContext applicationDbContext): IBookService 
 {
     private readonly ApplicationDbContext dbContext = applicationDbContext;
-    public async Task<Response<string>> Add(Book book)
+    public async Task<Response<string>> Add(BookDto bookDto)
     {
         try
         {
+            Book book = new Book
+            {
+                Title = bookDto.Title,
+                PublishedYear = bookDto.PublishedYear,
+                Genre = bookDto.Genre,
+                AuhtorId = bookDto.AuhtorId
+            };
             using var conn = dbContext.Connection();
             var query = "insert into books(title, publishedyear, genre, authorid) values(@title, @publishedyear, @genre, @authorid)";
             var res = await conn.ExecuteAsync(query, new {title = book.Title, publishedyear=book.PublishedYear, genre=book.Genre, authorid=book.AuhtorId});

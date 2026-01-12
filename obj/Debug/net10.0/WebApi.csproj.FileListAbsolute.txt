@@ -36,3 +36,4 @@ C:\Users\Shamsiddin\Desktop\exam1.net\WebApi\obj\Debug\net10.0\refint\WebApi.dll
 C:\Users\Shamsiddin\Desktop\exam1.net\WebApi\obj\Debug\net10.0\WebApi.pdb
 C:\Users\Shamsiddin\Desktop\exam1.net\WebApi\obj\Debug\net10.0\WebApi.genruntimeconfig.cache
 C:\Users\Shamsiddin\Desktop\exam1.net\WebApi\obj\Debug\net10.0\ref\WebApi.dll
+C:\Users\Shamsiddin\Desktop\exam1.net\WebApi\obj\Debug\net10.0\WebApi.sourcelink.json
