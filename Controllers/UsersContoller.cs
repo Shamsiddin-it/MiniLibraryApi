@@ -10,13 +10,13 @@ namespace WebApi.Controllers
     public class UsersContoller(IUserService userService) : ControllerBase
     {
         [HttpPost]
-        public async Task<Response<string>> Add(User User)
+        public async Task<Response<string>> Add(UserDto User)
         {
             return await userService.Add(User);
         }
 
         [HttpPut]
-        public async Task<Response<string>> Update(User User)
+        public async Task<Response<string>> Update(UpdateUserDto User)
         {
             return await userService.Update(User);
         }
@@ -34,7 +34,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{UserId}")]
-        public async Task<Response<User>> GetUserById(int UserId)
+        public async Task<Response<UserDto>> GetUserById(int UserId)
         {
             return await userService.GetUserById(UserId);
         }

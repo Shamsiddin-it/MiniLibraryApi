@@ -16,7 +16,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<Response<string>> Update(Book book)
+        public async Task<Response<string>> Update(UpdateBookDto book)
         {
             return await bookService.Update(book);
         }
@@ -34,7 +34,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{bookId}")]
-        public async Task<Response<Book>> GetBookById(int bookId)
+        public async Task<Response<BookDto>> GetBookById(int bookId)
         {
             return await bookService.GetBookById(bookId);
         }

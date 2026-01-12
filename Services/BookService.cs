@@ -52,21 +52,30 @@ public class BookService(ApplicationDbContext applicationDbContext): IBookServic
         }
     }
 
-    public async Task<Response<Book>> GetBookById(int bookId)
+    public async Task<Response<BookDto>> GetBookById(int bookId)
     {
         try
         {
             using var conn = dbContext.Connection();
             var query = "select * from books where id=@id";
             var res = await conn.QueryFirstOrDefaultAsync<Book>(query, new {id=bookId});
-            return res==null
-            ? new Response<Book>(HttpStatusCode.InternalServerError, "Not found!")
-            : new Response<Book>(HttpStatusCode.OK, "Found successfully!", res);
+            if (res == null)
+            {
+                return new Response<BookDto>(HttpStatusCode.NotFound, "not found");
+            }
+            BookDto bookDto = new BookDto
+            {
+                Title = res.Title,
+                Genre = res.Genre,
+                PublishedYear = res.PublishedYear,
+                AuhtorId = res.AuhtorId
+            };
+            return new Response<BookDto>(HttpStatusCode.OK, "the book with that id", bookDto);
         }
         catch(Exception ex)
         {
             System.Console.WriteLine(ex);
-            return new Response<Book>(HttpStatusCode.InternalServerError, $"Something went wrong!");
+            return new Response<BookDto>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -88,10 +97,18 @@ public class BookService(ApplicationDbContext applicationDbContext): IBookServic
         }
     }
 
-    public async Task<Response<string>> Update(Book book)
+    public async Task<Response<string>> Update(UpdateBookDto bookDto)
     {
         try
         {
+            Book book = new Book()
+            {
+                Id = bookDto.Id,
+                Title = bookDto.Title,
+                Genre = bookDto.Genre,
+                PublishedYear = bookDto.PublishedYear,
+                AuhtorId = bookDto.AuhtorId
+            };
             using var conn = dbContext.Connection();
             var query = "update books set title=@title, publishedyear=@publishedyear, genre=@genre, authorid=@authorid where id=@id";
             var res = await conn.ExecuteAsync(query, new {title = book.Title, publishedyear=book.PublishedYear, genre=book.Genre, authorid=book.AuhtorId, id=book.Id});
