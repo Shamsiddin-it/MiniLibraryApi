@@ -21,7 +21,8 @@ public class BookLoanService(ApplicationDbContext applicationDbContext): IBookLo
         }
         catch(Exception ex)
         {
-            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -38,7 +39,8 @@ public class BookLoanService(ApplicationDbContext applicationDbContext): IBookLo
         }
         catch(Exception ex)
         {
-            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -55,7 +57,8 @@ public class BookLoanService(ApplicationDbContext applicationDbContext): IBookLo
         }
         catch(Exception ex)
         {
-            return new Response<BookLoan>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<BookLoan>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -72,7 +75,8 @@ public class BookLoanService(ApplicationDbContext applicationDbContext): IBookLo
         }
         catch(Exception ex)
         {
-            return new Response<List<BookLoan>>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<List<BookLoan>>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -89,7 +93,8 @@ public class BookLoanService(ApplicationDbContext applicationDbContext): IBookLo
         }
         catch(Exception ex)
         {
-            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -106,7 +111,8 @@ public class BookLoanService(ApplicationDbContext applicationDbContext): IBookLo
         }
         catch(Exception ex)
         {
-            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 }

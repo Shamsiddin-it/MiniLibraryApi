@@ -21,7 +21,8 @@ public class UserService(ApplicationDbContext applicationDbContext): IUserServic
         }
         catch(Exception ex)
         {
-            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -38,7 +39,8 @@ public class UserService(ApplicationDbContext applicationDbContext): IUserServic
         }
         catch(Exception ex)
         {
-            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -55,7 +57,8 @@ public class UserService(ApplicationDbContext applicationDbContext): IUserServic
         }
         catch(Exception ex)
         {
-            return new Response<User>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<User>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -72,7 +75,8 @@ public class UserService(ApplicationDbContext applicationDbContext): IUserServic
         }
         catch(Exception ex)
         {
-            return new Response<List<User>>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<List<User>>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -89,7 +93,8 @@ public class UserService(ApplicationDbContext applicationDbContext): IUserServic
         }
         catch(Exception ex)
         {
-            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 }

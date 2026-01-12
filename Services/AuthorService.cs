@@ -18,7 +18,8 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
         }
         catch(Exception ex)
         {
-            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -35,7 +36,8 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
         }
         catch(Exception ex)
         {
-            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -52,7 +54,8 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
         }
         catch(Exception ex)
         {
-            return new Response<Author>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<Author>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -69,7 +72,8 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
         }
         catch(Exception ex)
         {
-            return new Response<List<Author>>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<List<Author>>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 
@@ -86,7 +90,8 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
         }
         catch(Exception ex)
         {
-            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong: {ex}");
+            System.Console.WriteLine(ex);
+            return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
 }
