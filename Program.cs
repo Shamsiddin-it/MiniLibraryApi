@@ -11,6 +11,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddLogging(config=> 
+    {config.AddConsole();
+    config.SetMinimumLevel(LogLevel.Information);
+    });
 
 var app = builder.Build();
 

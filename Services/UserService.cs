@@ -1,19 +1,22 @@
 using System;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Text;
 using Dapper;
 using WebApi.DTOs;
 using WebApi.Interfaces;
 
 namespace WebApi.Services;
 
-public class UserService(ApplicationDbContext applicationDbContext): IUserService
+public class UserService(ApplicationDbContext applicationDbContext, ILogger<UserService> logger): IUserService
 {
     private readonly ApplicationDbContext dbContext = applicationDbContext;
+    private readonly ILogger<UserService> _logger = logger;
     public async Task<Response<string>> Add(UserDto userDto)
     {
         try
         {
+            _logger.LogInformation("Starting user registration");
             User user = new User
             {
                 FullName = userDto.FullName,

@@ -6,13 +6,15 @@ using WebApi.Interfaces;
 
 namespace WebApi.Services;
 
-public class BookService(ApplicationDbContext applicationDbContext): IBookService 
+public class BookService(ApplicationDbContext applicationDbContext, ILogger<BookService> logger): IBookService 
 {
     private readonly ApplicationDbContext dbContext = applicationDbContext;
+    private readonly ILogger<BookService> _logger = logger;
     public async Task<Response<string>> Add(BookDto bookDto)
     {
         try
         {
+            _logger.LogInformation("Starting the process of adding new book.");
             Book book = new Book
             {
                 Title = bookDto.Title,
@@ -23,13 +25,20 @@ public class BookService(ApplicationDbContext applicationDbContext): IBookServic
             using var conn = dbContext.Connection();
             var query = "insert into books(title, publishedyear, genre, authorid) values(@title, @publishedyear, @genre, @authorid)";
             var res = await conn.ExecuteAsync(query, new {title = book.Title, publishedyear=book.PublishedYear, genre=book.Genre, authorid=book.AuhtorId});
-            return res==0
-            ? new Response<string>(HttpStatusCode.InternalServerError, "Could not add!")
-            : new Response<string>(HttpStatusCode.OK, "Added successfully!");
+            if (res == 0)
+            {
+                _logger.LogWarning("The process failed, book not added.");
+                return new Response<string>(HttpStatusCode.InternalServerError, "Could not add!");
+            }
+            else
+            {
+                _logger.LogInformation("The process finished all right. Book added!");
+                return new Response<string>(HttpStatusCode.OK, "Added successfully!"); 
+            }
         }
         catch(Exception ex)
         {
-            System.Console.WriteLine(ex);
+            _logger.LogError(ex.Message, "The process of adding book failed!");
             return new Response<string>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
@@ -61,6 +70,7 @@ public class BookService(ApplicationDbContext applicationDbContext): IBookServic
             var res = await conn.QueryFirstOrDefaultAsync<Book>(query, new {id=bookId});
             if (res == null)
             {
+                _logger.LogWarning("There is no book with this id");
                 return new Response<BookDto>(HttpStatusCode.NotFound, "not found");
             }
             BookDto bookDto = new BookDto
@@ -74,7 +84,7 @@ public class BookService(ApplicationDbContext applicationDbContext): IBookServic
         }
         catch(Exception ex)
         {
-            System.Console.WriteLine(ex);
+            _logger.LogCritical(ex.Message);
             return new Response<BookDto>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
@@ -86,13 +96,19 @@ public class BookService(ApplicationDbContext applicationDbContext): IBookServic
             using var conn = dbContext.Connection();
             var query = "select * from books";
             var res = await conn.QueryAsync<Book>(query);
-            return res==null
-            ? new Response<List<Book>>(HttpStatusCode.InternalServerError, "Not found!")
-            : new Response<List<Book>>(HttpStatusCode.OK, "Found successfully!", res.ToList());
+            if (res == null)
+            {
+                _logger.LogWarning("There is no books.");
+                return new Response<List<Book>>(HttpStatusCode.InternalServerError, "Not found!");
+            }
+            else
+            {
+                return new Response<List<Book>>(HttpStatusCode.OK, "Found successfully!", res.ToList());
+            }
         }
         catch(Exception ex)
         {
-            System.Console.WriteLine(ex);
+            _logger.LogError(ex.Message);
             return new Response<List<Book>>(HttpStatusCode.InternalServerError, $"Something went wrong!");
         }
     }
