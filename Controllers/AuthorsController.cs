@@ -15,10 +15,10 @@ namespace WebApi.Controllers
             return await authorService.Add(author);
         }
 
-        [HttpPut]
-        public async Task<Response<string>> Update(Author author)
+        [HttpPut("{authorId}")]
+        public async Task<Response<string>> Update(int authorId, Author author)
         {
-            return await authorService.Update(author);
+            return await authorService.Update(authorId, author);
         }
 
         [HttpDelete("{authorId}")]

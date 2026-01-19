@@ -1,8 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
-public class ApplicationDbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): DbContext(options)
 {
-    private readonly string connString = "Host=localhost;Port=5432;Database=minilibrary;Username=postgres;Password=907708429";
-
-    public NpgsqlConnection Connection()=> new NpgsqlConnection(connString);
+    public DbSet<Author> Authors {get; set;}
 }

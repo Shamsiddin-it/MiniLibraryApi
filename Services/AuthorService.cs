@@ -1,6 +1,7 @@
 using System.Net;
 using Dapper;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore;
 using WebApi.DTOs;
 
 public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorService
@@ -16,12 +17,9 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
                 BirthDate = author1.BirthDate,
                 Country = author1.Country
             };
-            using var conn = dbContext.Connection();
-            var query = "insert into authors(fullname, birthdate, country) values(@fullname, @birthdate, @country)";
-            var res = await conn.ExecuteAsync(query, new {fullname = author.FullName, birthdate = author.BirthDate, country = author.Country});
-            return res==0
-            ? new Response<string>(HttpStatusCode.InternalServerError, "Could not add!")
-            : new Response<string>(HttpStatusCode.OK, "Added successfully!");
+            dbContext.Authors.Add(author);
+            await dbContext.SaveChangesAsync();
+            return new Response<string>(HttpStatusCode.OK, "Added Successfully!");
         }
         catch(Exception ex)
         {
@@ -34,12 +32,10 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
     {
         try
         {
-            using var conn = dbContext.Connection();
-            var query = "delete from authors where id=@id";
-            var res = await conn.ExecuteAsync(query, new {id=authorId});
-            return res==0
-            ? new Response<string>(HttpStatusCode.InternalServerError, "Could not delete!")
-            : new Response<string>(HttpStatusCode.OK, "Deleted successfully!");
+            var author = await dbContext.Authors.FindAsync(authorId);
+            dbContext.Authors.RemoveRange(author);
+            await dbContext.SaveChangesAsync();
+            return new Response<string>(HttpStatusCode.OK, "deleted successfully!");
         }
         catch(Exception ex)
         {
@@ -52,12 +48,8 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
     {
         try
         {
-            using var conn = dbContext.Connection();
-            var query = "select * from authors where id=@id";
-            var res = await conn.QueryFirstOrDefaultAsync<Author>(query, new {id=authorId});
-            return res==null
-            ? new Response<Author>(HttpStatusCode.InternalServerError, "Not found!")
-            : new Response<Author>(HttpStatusCode.OK, "Found successfully!", res);
+            var res = await dbContext.Authors.FindAsync(authorId);
+            return new Response<Author>(HttpStatusCode.OK, "Found successfully!", res);
         }
         catch(Exception ex)
         {
@@ -70,12 +62,7 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
     {
         try
         {
-            using var conn = dbContext.Connection();
-            var query = "select * from authors";
-            var res = await conn.QueryAsync<Author>(query);
-            return res==null
-            ? new Response<List<Author>>(HttpStatusCode.InternalServerError, "Not found!")
-            : new Response<List<Author>>(HttpStatusCode.OK, "Found successfully!", res.ToList());
+            return new Response<List<Author>>(HttpStatusCode.OK, "Ok", await dbContext.Authors.ToListAsync());
         }
         catch(Exception ex)
         {
@@ -84,16 +71,16 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
         }
     }
 
-    public async Task<Response<string>> Update(Author author)
+    public async Task<Response<string>> Update(int authorId, Author author)
     {
         try
         {
-            using var conn = dbContext.Connection();
-            var query = "update authors set fullname=@fullname, birthdate=@birthdate, country=@country where id=@id";
-            var res = await conn.ExecuteAsync(query, new {fullname = author.FullName, birthdate = author.BirthDate, country = author.Country, id=author.Id});
-            return res==0
-            ? new Response<string>(HttpStatusCode.InternalServerError, "Could not update!")
-            : new Response<string>(HttpStatusCode.OK, "Updated successfully!");
+            var autor = await dbContext.Authors.FindAsync(authorId);
+            autor.FullName = author.FullName;
+            autor.BirthDate = author.BirthDate;
+            autor.Country = author.Country;
+            await dbContext.SaveChangesAsync();
+            return new Response<string>(HttpStatusCode.OK, "updated successfully!");
         }
         catch(Exception ex)
         {
