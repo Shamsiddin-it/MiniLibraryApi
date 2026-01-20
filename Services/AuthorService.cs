@@ -48,7 +48,7 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
     {
         try
         {
-            var res = await dbContext.Authors.FindAsync(authorId);
+            var res = dbContext.Authors.Include(a => a.Books).First(a=>a.Id==authorId);
             return new Response<Author>(HttpStatusCode.OK, "Found successfully!", res);
         }
         catch(Exception ex)
@@ -62,7 +62,8 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
     {
         try
         {
-            return new Response<List<Author>>(HttpStatusCode.OK, "Ok", await dbContext.Authors.ToListAsync());
+            var res = dbContext.Authors.Include(a=>a.Books).ToList();
+            return new Response<List<Author>>(HttpStatusCode.OK, "Ok", res);
         }
         catch(Exception ex)
         {

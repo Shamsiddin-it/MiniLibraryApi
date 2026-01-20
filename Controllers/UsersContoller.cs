@@ -15,17 +15,17 @@ namespace WebApi.Controllers
             return await userService.Add(User);
         }
 
-        [HttpPut]
-        public async Task<Response<string>> Update(UpdateUserDto User)
-        {
-            return await userService.Update(User);
-        }
+        // [HttpPut]
+        // public async Task<Response<string>> Update(UpdateUserDto User)
+        // {
+        //     return await userService.Update(User);
+        // }
 
-        [HttpDelete("{UserId}")]
-        public async Task<Response<string>> Delete(int UserId)
-        {
-            return await userService.Delete(UserId);
-        }
+        // [HttpDelete("{UserId}")]
+        // public async Task<Response<string>> Delete(int UserId)
+        // {
+        //     return await userService.Delete(UserId);
+        // }
 
         [HttpGet]
         public async Task<Response<List<User>>> GetUsers()
@@ -33,16 +33,16 @@ namespace WebApi.Controllers
             return await userService.GetUsers();   
         }
 
-        [HttpGet("{UserId}")]
-        public async Task<Response<UserDto>> GetUserById(int UserId)
-        {
-            return await userService.GetUserById(UserId);
-        }
+        // [HttpGet("{UserId}")]
+        // public async Task<Response<UserDto>> GetUserById(int UserId)
+        // {
+        //     return await userService.GetUserById(UserId);
+        // }
 
-        [HttpGet("{userid}/loans")]
-        public async Task<Response<UserWithLoans>> GetUserWithLoans(int userid)
-        {
-            return await userService.GetUserWithLoans(userid);
-        }
+        // [HttpGet("{userid}/loans")]
+        // public async Task<Response<UserWithLoans>> GetUserWithLoans(int userid)
+        // {
+        //     return await userService.GetUserWithLoans(userid);
+        // }
     }
 }

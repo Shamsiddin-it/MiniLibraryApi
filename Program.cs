@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApi.Interfaces;
 using WebApi.Middlewares;
+using WebApi.Services;
 // using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,9 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 // builder.Services.AddScoped<ApplicationDbContext>();
 builder.Services.AddDbContext<ApplicationDbContext>(options=> options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IAuthorService, AuthorService>();
-// builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IBookService, BookService>();
 // builder.Services.AddScoped<IBookLoanService, BookLoanService>();
-// builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
