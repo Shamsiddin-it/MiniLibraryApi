@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Headers;
 using Dapper;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -44,17 +45,20 @@ public class AuthorService(ApplicationDbContext applicationDbContext) : IAuthorS
         }
     }
 
-    public async Task<Response<Author>> GetAuthorById(int authorId)
+    public async Task<Response<Author?>> GetAuthorById(int authorId)
     {
         try
         {
             var res = dbContext.Authors.Include(a => a.Books).First(a=>a.Id==authorId);
-            return new Response<Author>(HttpStatusCode.OK, "Found successfully!", res);
+            return res == null
+            ? new Response<Author?>(HttpStatusCode.NotFound, "Author with this id not found")
+            : new Response<Author?>(HttpStatusCode.OK, "Found successfully!", res);
+
         }
         catch(Exception ex)
         {
             System.Console.WriteLine(ex);
-            return new Response<Author>(HttpStatusCode.InternalServerError, $"Something went wrong!");
+            return new Response<Author?>(HttpStatusCode.NotFound, $"Something went wrong!");
         }
     }
 

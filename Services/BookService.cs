@@ -1,8 +1,12 @@
 using System;
 using System.Net;
 using Dapper;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using WebApi.DTOs;
+using WebApi.Filters;
 using WebApi.Interfaces;
+using WebApi.Responses;
 
 namespace WebApi.Services;
 
@@ -75,26 +79,44 @@ public class BookService(ApplicationDbContext applicationDbContext, ILogger<Book
         }
     }
 
-    public async Task<Response<List<Book>>> GetBooks()
+    public async Task<PagedResult<Book>> GetBooks(BookFilter filter, PagedQuery pagedQuery)
     {
-        try
+        // try
         {
-            var res = dbContext.Books.ToList();
-            if (res == null)
+            IQueryable<Book> query = dbContext.Books.AsNoTracking();
+            if (filter.Title != null)
             {
-                _logger.LogWarning("There is no books.");
-                return new Response<List<Book>>(HttpStatusCode.InternalServerError, "Not found!");
+                query = query.Where(x=>x.Title==filter.Title);
             }
-            else
+
+            if (filter.PublishedYear > 0)
             {
-                return new Response<List<Book>>(HttpStatusCode.OK, "Found successfully!", res);
+                query = query.Where(x=>x.PublishedYear==filter.PublishedYear);
             }
+
+            var total = await query.CountAsync();
+            if (pagedQuery.Page != 0 & pagedQuery.PageSize!=0)
+            {
+                query = query.Skip((pagedQuery.Page-1)*pagedQuery.PageSize).Take(pagedQuery.PageSize); 
+            }
+
+            var books = query.ToList();
+            var response = new PagedResult<Book>()
+            {
+                Items = books,
+                Page = pagedQuery.Page,
+                PageSize = pagedQuery.PageSize,
+                TotalCount = total,
+                TotalPages = total/pagedQuery.PageSize
+            };
+            return response;
+
         }
-        catch(Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return new Response<List<Book>>(HttpStatusCode.InternalServerError, $"Something went wrong!");
-        }
+        // catch(Exception ex)
+        // {
+        //     _logger.LogError(ex.Message);
+        //     return new Response<List<Book>>(HttpStatusCode.InternalServerError, $"Something went wrong!");
+        // }
     }
 
     public async Task<Response<string>> Update(UpdateBookDto bookDto)

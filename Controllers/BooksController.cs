@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs;
+using WebApi.Filters;
 using WebApi.Interfaces;
+using WebApi.Responses;
 
 namespace WebApi.Controllers
 {
@@ -28,9 +30,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<Response<List<Book>>> GetBooks()
+        public async Task<PagedResult<Book>> GetBooks([FromQuery] BookFilter filter, [FromQuery] PagedQuery pagedQuery)
         {
-            return await bookService.GetBooks();   
+            return await bookService.GetBooks(filter, pagedQuery);   
         }
 
         [HttpGet("{bookId}")]
