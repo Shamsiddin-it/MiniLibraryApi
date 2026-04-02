@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.DTOs;
@@ -29,6 +30,7 @@ namespace WebApi.Controllers
             return await bookService.Delete(bookId);
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<PagedResult<Book>> GetBooks([FromQuery] BookFilter filter, [FromQuery] PagedQuery pagedQuery)
         {

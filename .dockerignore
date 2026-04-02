@@ -1,0 +1,14 @@
+bin/
+obj/
+.git/
+.vs/
+.vscode/
+.env
+.env.*
+docker-compose*.yml
+publish/
+README.md
+WebApi.http
+appsettings.Development.json
+Properties/launchSettings.json
+tests/
